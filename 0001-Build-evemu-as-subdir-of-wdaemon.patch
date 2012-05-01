@@ -1,0 +1,41 @@
+From 6641535fb0accee835f8fd700fdd2a0b699f641e Mon Sep 17 00:00:00 2001
+From: Peter Hutterer <peter.hutterer@who-t.net>
+Date: Wed, 6 Apr 2011 14:52:25 +1000
+Subject: [PATCH] Build evemu as subdir of wdaemon
+
+Also forces evemu to be linked as static library. Rest of the magic is in
+the spec file.
+
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+---
+ Makefile.am |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index b93aac6..45626a9 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,8 +1,9 @@
+-SUBDIRS = udev conf scripts
++evemu=utouch-evemu-1.0.6
++SUBDIRS = udev conf scripts $(evemu)
+ 
+ bin_PROGRAMS = wdaemon
+ 
+-AM_CPPFLAGS = $(EVEMU_CFLAGS)
++AM_CPPFLAGS = $(EVEMU_CFLAGS) -I$(evemu)/include
+ 
+ wdaemon_SOURCES =  \
+                     config.c \
+@@ -32,7 +33,7 @@ wdaemon_SOURCES =  \
+                     wdaemon-evemu.h
+ 
+ wdaemon_CFLAGS = $(AM_CFLAGS) -DUINPUT_DEVICE='"$(UINPUT_DEVICE)"' -DWDAEMON_DEVNAME_PREFIX='"$(WDAEMON_DEVNAME_PREFIX)"'
+-wdaemon_LDADD = $(EVEMU_LIBS)
++wdaemon_LDADD = $(evemu)/src/libutouch-evemu.la
+ 
+ # man page generation.
+ if HAVE_DOCTOOLS
+-- 
+1.7.4.4
+
